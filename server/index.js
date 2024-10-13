@@ -18,6 +18,9 @@ app.use(
   })
 );
 
+app.use(cookieParser());
+app.use(express.json());
+
 const server = app.listen(port, () => {
   console.log(`Server is runnning at http://localhost:${port}`);
 });
