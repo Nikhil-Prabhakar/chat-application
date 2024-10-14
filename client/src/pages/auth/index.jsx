@@ -33,11 +33,9 @@ const Auth = () => {
   const handleLogin = async () => {};
 
   const handleSignup = async () => {
-    try {
+    if (validateSignup()) {
       const response = await apiClient.post("/signup", { email, password });
-      console.log(response.data);
-    } catch (error) {
-      console.error(error);
+      console.log({ response });
     }
   };
 
