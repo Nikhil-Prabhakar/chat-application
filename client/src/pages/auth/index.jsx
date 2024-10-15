@@ -14,6 +14,18 @@ const Auth = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const validateLogin = () => {
+    if (!email.length) {
+      toast.error("Email is required.");
+      return false;
+    }
+    if (!password.length) {
+      toast.error("Password is required.");
+      return false;
+    }
+    return true;
+  };
+
   const validateSignup = () => {
     if (!email.length) {
       toast.error("Email is required.");
@@ -30,11 +42,24 @@ const Auth = () => {
     return true;
   };
 
-  const handleLogin = async () => {};
+  const handleLogin = async () => {
+    if (validateLogin()) {
+      const response = await apiClient.post(
+        "/login",
+        { email, password },
+        { withCredentials: true }
+      );
+      console.log({ response });
+    }
+  };
 
   const handleSignup = async () => {
     if (validateSignup()) {
-      const response = await apiClient.post("/signup", { email, password });
+      const response = await apiClient.post(
+        "/signup",
+        { email, password },
+        { withCredentials: true }
+      );
       console.log({ response });
     }
   };
