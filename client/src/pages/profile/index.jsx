@@ -3,8 +3,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { getColor } from "@/lib/utils";
+import { colors, getColor } from "@/lib/utils";
 import { FaPlus, FaTrash } from "react-icons/fa";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -59,7 +61,58 @@ const Profile = () => {
             )}
             {/* <input type="text" /> */}
           </div>
-          <div></div>
+          <div className="flex min-w-32 md:min-w-64 flex-col gap-5 text-white items-center justify-center ">
+            <div className="w-full">
+              <Input
+                placeholder="Email"
+                type="email"
+                disabled
+                value={userInfo.email}
+                className="rounded-lg p-6 bg-[#2c2e3b] border-none "
+              />
+            </div>
+            <div className="w-full">
+              <Input
+                placeholder="First Name"
+                type="text"
+                onChange={(e) => setFirstName(e.target.value)}
+                value={firstName}
+                className="rounded-lg p-6 bg-[#2c2e3b] border-none "
+              />
+            </div>
+            <div className="w-full">
+              <Input
+                placeholder="Last Name"
+                type="text"
+                onChange={(e) => setlastName(e.target.value)}
+                value={lastName}
+                className="rounded-lg p-6 bg-[#2c2e3b] border-none "
+              />
+            </div>
+            <div className="w-full flex gap-5">
+              {colors.map((color, index) => (
+                <div
+                  className={`${color} h-8 w-8 rounded-full cursor-pointer transition-all duration-300 
+                  ${
+                    selectedColor === index
+                      ? "outline outline-white/1 outline-3"
+                      : ""
+                  }
+                  `}
+                  key={index}
+                  onClick={() => setSelectedColor(index)}
+                ></div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="w-full">
+          <Button
+            className="h-16 w-full bg-purple-700 hover:bg-purple-900 transition-all duration-300"
+            onClick={saveChanges}
+          >
+            Save Changes
+          </Button>
         </div>
       </div>
     </div>
