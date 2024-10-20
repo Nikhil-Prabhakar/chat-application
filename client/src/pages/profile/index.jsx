@@ -1,5 +1,5 @@
 import { useAppStore } from "@/store";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
@@ -7,6 +7,8 @@ import { colors, getColor } from "@/lib/utils";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { apiClient } from "@/lib/api-client";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -17,12 +19,57 @@ const Profile = () => {
   const [hovered, setHovered] = useState(false);
   const [selectedColor, setSelectedColor] = useState(0);
 
-  const saveChanges = async () => {};
+  useEffect(() => {
+    if (userInfo.profileSetup) {
+      setFirstName(userInfo.firstName);
+      setlastName(userInfo.lastName);
+      setSelectedColor(userInfo.color);
+    }
+  }, [userInfo]);
+
+  const validateProfile = () => {
+    if (!firstName) {
+      toast.error("First Name is required.");
+      return false;
+    }
+    if (!lastName) {
+      toast.error("Last Name is required.");
+      return false;
+    }
+    return true;
+  };
+
+  const saveChanges = async () => {
+    if (validateProfile()) {
+      try {
+        const response = await apiClient.post(
+          "/update-profile",
+          { firstName, lastName, color: selectedColor },
+          { withCredentials: true }
+        );
+        if (response.status === 200 && response.data) {
+          setUserInfo({ ...response.data });
+          toast.success("Profile updated successfully.");
+          navigate("/chat");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  const handleNavigate = () => {
+    if (userInfo.profileSetup) {
+      navigate("/chat");
+    } else {
+      toast.error("Please setup profile.");
+    }
+  };
 
   return (
     <div className="bg-[#1b1c24] h-[100vh] flex items-center justify-center flex-col gap-10">
       <div className="flex flex-col gap-10 w-[80vw] md:w-max">
-        <div>
+        <div onClick={handleNavigate}>
           <IoArrowBack className="text-4xl lg:text-6xl text-white/90 cursor-pointer" />
         </div>
         <div className="grid grid-cols-2">
