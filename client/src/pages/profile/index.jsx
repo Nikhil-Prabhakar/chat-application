@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { apiClient } from "@/lib/api-client";
+import { HOST } from "@/utils/constants";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -25,6 +26,9 @@ const Profile = () => {
       setFirstName(userInfo.firstName);
       setlastName(userInfo.lastName);
       setSelectedColor(userInfo.color);
+    }
+    if (userInfo.image) {
+      setImage(`${HOST}/${userInfo.image}`);
     }
   }, [userInfo]);
 
@@ -72,7 +76,7 @@ const Profile = () => {
   };
 
   const handleImageChange = async (event) => {
-    const file = evemt.target.files[0];
+    const file = event.target.files[0];
     console.log({ file });
     if (file) {
       const formData = new FormData();
@@ -84,7 +88,7 @@ const Profile = () => {
         setUserInfo({ ...userInfo, image: response.data.image });
         toast.success("Image updated successfully.");
       }
-
+      // Remove this code below:
       // const reader = new FileReader();
       // reader.onload = () => {
       //   setImage(reader.result);
@@ -93,7 +97,20 @@ const Profile = () => {
     }
   };
 
-  const handleDeleteImage = async () => {};
+  const handleDeleteImage = async () => {
+    try {
+      const response = await apiClient.delete("/remove-profile-image", {
+        withCredentials: true,
+      });
+      if (response.status === 200) {
+        setUserInfo({ ...userInfo, image: null });
+        toast.success("Image removed successfully.");
+        setImage(null);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="bg-[#1b1c24] h-[100vh] flex items-center justify-center flex-col gap-10">
