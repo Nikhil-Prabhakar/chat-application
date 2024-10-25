@@ -1,5 +1,5 @@
 import EmojiPicker from "emoji-picker-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { GrAttachment } from "react-icons/gr";
 import { IoSend } from "react-icons/io5";
 import { RiEmojiStickerLine } from "react-icons/ri";
@@ -8,6 +8,18 @@ const MessageBar = () => {
   const emojiRef = useRef();
   const [message, setMessage] = useState("");
   const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
+
+  // useEffect(() => {
+  //   function handleClickOutside(event) {
+  //     if (emojiRef.current && !emojiRef.current.contains(event.target)) {
+  //       setEmojiPickerOpen(false);
+  //     }
+  //   }
+  //   document.addEventListener("mousedown", handleClickOutside);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   };
+  // }, [emojiRef]);
 
   const handleAddEmoji = (emoji) => {
     setMessage((msg) => msg + emoji.emoji);
@@ -36,10 +48,13 @@ const MessageBar = () => {
             <RiEmojiStickerLine className="text-2xl" />
           </button>
           <div className="absolute bottom-16 right-0">
+            {" "}
+            {/*ref={emojiRef}*/}
             <EmojiPicker
               theme="dark"
               open={emojiPickerOpen}
               onEmojiClick={handleAddEmoji}
+              // autoFocusSearch={false}
             />
           </div>
         </div>
