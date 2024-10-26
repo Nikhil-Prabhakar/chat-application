@@ -1,4 +1,4 @@
-// import ProfileInfo from "./components/profile-info";
+import ProfileInfo from "@/pages/chat/components/contacts-container/component/profile-info";
 
 const ContactsContainer = () => {
   return (
@@ -16,7 +16,7 @@ const ContactsContainer = () => {
           <Title text="Channels" />
         </div>
       </div>
-      {/* <ProfileInfo /> */}
+      <ProfileInfo />
     </div>
   );
 };
