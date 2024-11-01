@@ -74,7 +74,7 @@ const NewDM = () => {
           </div>
           <ScrollArea className="h-[250px]">
             <div className="flex flex-col gap-5">
-              {searchContacts.map((contact) => (
+              {searchedContacts.map((contact) => (
                 <div
                   key={contact._id}
                   className="flex gap-3 items-center cursor-pointer"
@@ -89,7 +89,7 @@ const NewDM = () => {
                         />
                       ) : (
                         <div
-                          className={`uppercase h-12 w-12 text-lg border-[1px] flex items-center justify-center rounded-full  ${getColor(
+                          className={`uppercase h-12 w-12 text-lg border-[1px] flex items-center justify-center rounded-full ${getColor(
                             contact.color
                           )}`}
                         >
@@ -99,6 +99,14 @@ const NewDM = () => {
                         </div>
                       )}
                     </Avatar>
+                  </div>
+                  <div className="flex flex-col">
+                    <span>
+                      {contact.firstName && contact.lastName
+                        ? `${contact.firstName} ${contact.lastName}`
+                        : ""}
+                    </span>
+                    <span className="test-xs">{contact.email}</span>
                   </div>
                 </div>
               ))}
