@@ -104,7 +104,7 @@ const NewDM = () => {
                     <span>
                       {contact.firstName && contact.lastName
                         ? `${contact.firstName} ${contact.lastName}`
-                        : ""}
+                        : contact.email}
                     </span>
                     <span className="test-xs">{contact.email}</span>
                   </div>
