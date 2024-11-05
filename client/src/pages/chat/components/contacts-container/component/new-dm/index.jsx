@@ -29,18 +29,21 @@ const NewDM = () => {
     try {
       if (searchTerm.length > 0) {
         const response = await apiClient.post(
-          "/search",
+          `${HOST}/api/contacts/search`, // Corrected endpoint
           { searchTerm },
           { withCredentials: true }
         );
-      }
-      if (response.status === 200 && response.data.contacts) {
-        setSearchedContacts(response.data.contacts);
+
+        if (response.status === 200 && response.data.contacts) {
+          setSearchedContacts(response.data.contacts);
+        } else {
+          setSearchedContacts([]);
+        }
       } else {
-        setSearchedContacts([]);
+        setSearchedContacts([]); // Clear the search results if the search term is empty
       }
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching contacts:", error);
     }
   };
 
@@ -50,7 +53,7 @@ const NewDM = () => {
         <Tooltip>
           <TooltipTrigger>
             <FaPlus
-              className=" text-neutral-400 font-light text-opacity-90 text-start hover:text-neutral-100 cursor-pointer transition-all duration-300"
+              className="text-neutral-400 font-light text-opacity-90 text-start hover:text-neutral-100 cursor-pointer transition-all duration-300"
               onClick={() => setOpenNewContactModal(true)}
             />
           </TooltipTrigger>
