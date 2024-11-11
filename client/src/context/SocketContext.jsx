@@ -23,6 +23,10 @@ export const SocketProvider = ({ children }) => {
         console.log("Connected to socket server");
       });
 
+      const handleRecieveMessage = (message) => {};
+
+      socket.current.on("recieveMessage", handleRecieveMessage);
+
       return () => {
         socket.current.disconnect();
       };
