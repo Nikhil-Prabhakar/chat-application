@@ -1,3 +1,5 @@
+import { useSocket } from "@/context/SocketContext";
+import { useAppStore } from "@/store";
 import EmojiPicker from "emoji-picker-react";
 import { useEffect, useRef, useState } from "react";
 import { GrAttachment } from "react-icons/gr";
@@ -6,9 +8,12 @@ import { RiEmojiStickerLine } from "react-icons/ri";
 
 const MessageBar = () => {
   const emojiRef = useRef();
+  const socket = useSocket();
+  const { selectedChatType, selectedChatData, userInfo } = useAppStore();
   const [message, setMessage] = useState("");
   const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
 
+  // Close emoji picker when clicked outside
   useEffect(() => {
     function handleClickOutside(event) {
       if (emojiRef.current && !emojiRef.current.contains(event.target)) {
@@ -21,11 +26,30 @@ const MessageBar = () => {
     };
   }, [emojiRef]);
 
+  // Add emoji to message
   const handleAddEmoji = (emoji) => {
     setMessage((msg) => msg + emoji.emoji);
   };
 
-  const handleSendMessage = async () => {};
+  // Send message via socket
+  const handleSendMessage = async () => {
+    if (!selectedChatData || !userInfo) {
+      console.error("Error: selectedChatData or userInfo is missing.");
+      return;
+    }
+
+    // Ensure selectedChatData has _id and userInfo has id
+    const messageData = {
+      sender: userInfo.id,
+      content: message,
+      recipient: selectedChatData._id,
+      messageType: "text",
+      fileUrl: undefined, // Add file handling here if needed
+    };
+
+    // Emit the message to the socket server
+    socket.emit("sendMessage", messageData);
+  };
 
   return (
     <div className="h-[10vh] bg-[#1c1d25] flex justify-center items-center px-8 mb-6 gap-6">
