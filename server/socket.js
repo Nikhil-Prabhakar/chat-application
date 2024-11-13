@@ -13,6 +13,7 @@ const setupSocket = (server) => {
 
   const userSocketMap = new Map();
 
+  // Disconnect user from socket
   const disconnect = (socket) => {
     console.log(`Client Disconnected: ${socket.id}`);
     for (const [userId, socketId] of userSocketMap.entries()) {
@@ -23,16 +24,20 @@ const setupSocket = (server) => {
     }
   };
 
+  // Handle sending message
   const sendMessage = async (message) => {
     const senderSocketId = userSocketMap.get(message.sender);
     const recipientSocketId = userSocketMap.get(message.recipient);
 
+    // Create the message in the database
     const createdMessage = await Message.create(message);
 
+    // Populate the message with sender and recipient info
     const messageData = await Message.findById(createdMessage._id)
       .populate("sender", "id email firstName lastName image color")
       .populate("recipient", "id email firstName lastName image color");
 
+    // Emit the message to both sender and recipient
     if (recipientSocketId) {
       io.to(recipientSocketId).emit("recieveMessage", messageData);
     }
