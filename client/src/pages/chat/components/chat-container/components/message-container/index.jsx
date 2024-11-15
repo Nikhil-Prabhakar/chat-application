@@ -18,7 +18,7 @@ const MessageContainer = () => {
     const getMessages = async () => {
       try {
         const response = await apiClient.post(
-          "/api/messages/get-messages",
+          "api/messages/get-messages",
           { id: selectedChatData._id },
           { withCredentials: true }
         );
