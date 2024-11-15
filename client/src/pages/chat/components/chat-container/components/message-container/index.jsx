@@ -1,5 +1,6 @@
 import { apiClient } from "@/lib/api-client";
 import { useAppStore } from "@/store";
+import { HOST } from "@/utils/constants";
 import axios from "axios";
 import moment from "moment";
 import { useEffect, useRef } from "react";
@@ -18,7 +19,7 @@ const MessageContainer = () => {
     const getMessages = async () => {
       try {
         const response = await apiClient.post(
-          "api/messages/get-messages",
+          `${HOST}/api/messages/get-messages`,
           { id: selectedChatData._id },
           { withCredentials: true }
         );
