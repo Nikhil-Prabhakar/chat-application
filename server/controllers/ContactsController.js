@@ -35,7 +35,7 @@ export const searchContacts = async (request, response, next) => {
 
 export const getContactsForDMList = async (request, response, next) => {
   try {
-    let { userId } = req;
+    let { userId } = request;
     userId = new mongoose.Types.ObjectId(userId);
 
     const contacts = await Message.aggregate([
@@ -53,7 +53,33 @@ export const getContactsForDMList = async (request, response, next) => {
               else: "$sender",
             },
           },
+          lastMessageTime: { $first: "$timestamp" },
         },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "_id",
+          foreignField: "_id",
+          as: "contactInfo",
+        },
+      },
+      {
+        $unwind: "$contactInfo",
+      },
+      {
+        $project: {
+          _id: 1,
+          lastMessageTime: 1,
+          email: "$contactInfo.email",
+          firstName: "$contactInfo.firstName",
+          lastName: "$contactInfo.lastName",
+          image: "$contactInfo.image",
+          color: "$contactInfo.color",
+        },
+      },
+      {
+        $sort: { lastMessageTime: -1 },
       },
     ]);
 

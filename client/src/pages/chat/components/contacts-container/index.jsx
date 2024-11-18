@@ -1,7 +1,25 @@
 import ProfileInfo from "@/pages/chat/components/contacts-container/component/profile-info";
 import NewDM from "@/pages/chat/components/contacts-container/component/new-dm";
+import { useEffect } from "react";
+import { apiClient } from "@/lib/api-client";
+import { HOST } from "@/utils/constants";
 
 const ContactsContainer = () => {
+  useEffect(() => {
+    const getContacts = async () => {
+      const response = await apiClient.get(
+        `${HOST}/api/contacts/get-contacts-for-dm`,
+        {
+          withCredentials: true,
+        }
+      );
+      if (response.data.contacts) {
+        console.log(response.data.contacts);
+      }
+    };
+    getContacts();
+  }, []);
+
   return (
     <div className="relative md:w-[35vw] lg:w[30vw] xl:w-[20vw] bg-[#1b1c24] border-r-2 border-[#2f303b] w-full">
       <div className="pt-3">
