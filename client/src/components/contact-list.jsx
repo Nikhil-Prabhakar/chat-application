@@ -14,7 +14,7 @@ const ContactList = ({ contacts, isChannel = false }) => {
 
   const handleClick = (contact) => {
     if (isChannel) setSelectedChatType("channel");
-    else selectedChatType("contact");
+    else setSelectedChatType("contact");
     setSelectedChatData(contact);
     if (selectedChatData && selectedChatData._id !== contact._id) {
       setSelectedChatMessages([]);
@@ -33,7 +33,7 @@ const ContactList = ({ contacts, isChannel = false }) => {
           }`}
           onClick={() => handleClick(contact)}
         >
-          <div className="flex gpa-5 items-center justify-start text-neutral-300">
+          <div className="flex gap-5 items-center justify-start text-neutral-300">
             {!isChannel && (
               <Avatar className="h-10 w-10 rounded-full overflow-hidden">
                 {contact.image ? (
@@ -44,9 +44,14 @@ const ContactList = ({ contacts, isChannel = false }) => {
                   />
                 ) : (
                   <div
-                    className={`uppercase h-10 w-10 text-lg border-[1px] flex items-center justify-center rounded-full ${getColor(
-                      contact.color
-                    )}`}
+                    className={`
+                        ${
+                          selectedChatData &&
+                          selectedChatData._id === contact._id
+                            ? "bg-[#ffffff22] border border-white/70"
+                            : getColor(contact.color)
+                        }
+                        uppercase h-10 w-10 text-lg border-[1px] flex items-center justify-center rounded-full`}
                   >
                     {contact.firstName
                       ? contact.firstName.split("").shift()
@@ -54,6 +59,16 @@ const ContactList = ({ contacts, isChannel = false }) => {
                   </div>
                 )}
               </Avatar>
+            )}
+            {isChannel && (
+              <div className="bg-[#ffffff22] h-10 w-10 flex items-center justify-center rounded-full">
+                #
+              </div>
+            )}
+            {isChannel ? (
+              <span>{contact.name}</span>
+            ) : (
+              <span>{`${contact.firstName} ${contact.lastName}`}</span>
             )}
           </div>
         </div>
