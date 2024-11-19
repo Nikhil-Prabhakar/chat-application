@@ -3,8 +3,12 @@ import NewDM from "@/pages/chat/components/contacts-container/component/new-dm";
 import { useEffect } from "react";
 import { apiClient } from "@/lib/api-client";
 import { HOST } from "@/utils/constants";
+import { useAppStore } from "@/store";
+import ContactList from "@/components/contact-list";
 
 const ContactsContainer = () => {
+  const { setDirectMessagesContacts, directMessagesContacts } = useAppStore();
+
   useEffect(() => {
     const getContacts = async () => {
       const response = await apiClient.get(
@@ -14,7 +18,7 @@ const ContactsContainer = () => {
         }
       );
       if (response.data.contacts) {
-        console.log(response.data.contacts);
+        setDirectMessagesContacts(response.data.contacts);
       }
     };
     getContacts();
@@ -29,6 +33,9 @@ const ContactsContainer = () => {
         <div className="flex items-center justify-between pr-10">
           <Title text="Direct Messages" />
           <NewDM />
+        </div>
+        <div className="max-h-[38vh] overflow-y-auto scrollbar-hidden">
+          <ContactList contacts={directMessagesContacts} />
         </div>
       </div>
       <div className="my-5">
