@@ -1,5 +1,7 @@
 import { useSocket } from "@/context/SocketContext";
+import { apiClient } from "@/lib/api-client";
 import { useAppStore } from "@/store";
+import { HOST, UPLOAD_FILE_ROUTE } from "@/utils/constants";
 import EmojiPicker from "emoji-picker-react";
 import { useEffect, useRef, useState } from "react";
 import { GrAttachment } from "react-icons/gr";
@@ -61,6 +63,29 @@ const MessageBar = () => {
   const handleAttachmentChange = async (event) => {
     try {
       const file = event.target.files[0];
+      if (file) {
+        const formData = new FormData();
+        formData.append("file", file);
+        const response = await apiClient.post(
+          `${HOST}/api/messages/upload-file`,
+          formData,
+          {
+            withCredentials: true,
+          }
+        );
+
+        if (response.status === 200 && response.data) {
+          if (selectedChatType === "contact") {
+            socket.emit("sendMessage", {
+              sender: userInfo.id,
+              content: undefined,
+              recipient: selectedChatData._id,
+              messageType: "file",
+              fileUrl: response.data.filePath, // Add file handling here if needed
+            });
+          }
+        }
+      }
       console.log({ file });
     } catch (error) {
       console.log(error);
