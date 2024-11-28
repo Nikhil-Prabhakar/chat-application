@@ -68,7 +68,7 @@ const MessageContainer = () => {
     });
   };
 
-  const donwloadFile = async (file) => {
+  const donwloadFile = async (url) => {
     const response = await apiClient.get(`${HOST}/${url}`, {
       responseType: "blob",
     });
