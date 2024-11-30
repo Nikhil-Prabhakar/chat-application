@@ -3,7 +3,7 @@ import { useAppStore } from "@/store";
 import { HOST } from "@/utils/constants";
 // import axios from "axios";
 import moment from "moment";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MdFolderZip } from "react-icons/md";
 import { IoMdArrowRoundDown } from "react-icons/io";
 import { IoCloseSharp } from "react-icons/io5";
@@ -151,7 +151,7 @@ const MessageContainer = () => {
       {renderMessages()}
       <div ref={scrollRef} />
       {showImage && (
-        <div className="fixed z-[1000] top-0 left-0 h-[100vh] w-[100vh] flex items-center justify-center backdrop-blur-lg flex-col">
+        <div className="fixed z-[1000] top-0 left-0 h-[100vh] w-[100vw] flex items-center justify-center backdrop-blur-lg flex-col">
           <div>
             <img
               src={`${HOST}/${imageURL}`}
